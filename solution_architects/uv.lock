@@ -3779,10 +3779,16 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "crewai", extra = ["tools"] },
+    { name = "langchain-community" },
+    { name = "networkx" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "crewai", extras = ["tools"], specifier = ">=0.86.0,<1.0.0" }]
+requires-dist = [
+    { name = "crewai", extras = ["tools"], specifier = ">=0.86.0,<1.0.0" },
+    { name = "langchain-community", specifier = ">=0.3.12,<1.0.0" },
+    { name = "networkx", specifier = ">=3.2.1,<4.0.0" },
+]
 
 [[package]]
 name = "sortedcontainers"

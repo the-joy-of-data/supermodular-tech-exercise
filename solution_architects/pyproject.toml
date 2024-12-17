@@ -5,7 +5,9 @@ description = "solution_architects using crewAI"
 authors = [{ name = "Joy Chatterjee", email = "sreenjoy@thejoyofdata.co" }]
 requires-python = ">=3.10,<=3.13"
 dependencies = [
-    "crewai[tools]>=0.86.0,<1.0.0"
+    "crewai[tools]>=0.86.0,<1.0.0",
+    "langchain-community>=0.3.12,<1.0.0",
+    "networkx>=3.2.1,<4.0.0"
 ]
 
 [project.scripts]

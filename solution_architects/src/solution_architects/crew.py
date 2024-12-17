@@ -1,7 +1,10 @@
 from crewai import Agent, Crew, Process, Task
+from crewai.tools import BaseTool
 from crewai.project import CrewBase, agent, crew, task
 
-# If you want to run a snippet of code before or after the crew starts, 
+from solution_architects.tools.callgraphgenerator import call_graph_tool
+
+# If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
@@ -9,54 +12,72 @@ from crewai.project import CrewBase, agent, crew, task
 class SolutionArchitects():
 	"""SolutionArchitects crew"""
 
-	# Learn more about YAML configuration files here:
-	# Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-	# Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
-	# If you would like to add tools to your agents, you can learn more about it here:
-	# https://docs.crewai.com/concepts/agents#agent-tools
 	@agent
-	def researcher(self) -> Agent:
+	def code_analyst(self) -> Agent:
+		"""Code Analyst Agent"""
 		return Agent(
-			config=self.agents_config['researcher'],
-			verbose=True
+			config=self.agents_config['code-analyst'],
+			verbose=True,
+			tools=code_analysis_tool
 		)
 
-	@agent
-	def reporting_analyst(self) -> Agent:
-		return Agent(
-			config=self.agents_config['reporting_analyst'],
-			verbose=True
-		)
+	# @agent
+	# def sequence_diagrammer(self) -> Agent:
+	# 	return Agent(
+	# 		config=self.agents_config['sequence-diagrammer'],
+	# 		verbose=True
+	# 	)
 
-	# To learn more about structured task outputs, 
-	# task dependencies, and task callbacks, check out the documentation:
-	# https://docs.crewai.com/concepts/tasks#overview-of-a-task
-	@task
-	def research_task(self) -> Task:
-		return Task(
-			config=self.tasks_config['research_task'],
-		)
+	# @agent
+	# def compliance_validator(self) -> Agent:
+	# 	return Agent(
+	# 		config=self.agents_config['compliance-validator'],
+	# 		verbose=True
+	# 	)
 
 	@task
-	def reporting_task(self) -> Task:
+	def code_analysis_task(self) -> Task:
 		return Task(
-			config=self.tasks_config['reporting_task'],
-			output_file='report.md'
+			config=self.tasks_config['code-analysis-task'],
 		)
+
+	# @task
+	# def sequence_diagram_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['sequence-diagram-task'],
+	# 		output_file='sequence_diagram.mmd'
+	# 	)
+
+	# @task
+	# def compliance_validation_task(self) -> Task:
+	# 	return Task(
+	# 		config=self.tasks_config['compliance-validation-task'],
+	# 	)
 
 	@crew
 	def crew(self) -> Crew:
 		"""Creates the SolutionArchitects crew"""
-		# To learn how to add knowledge sources to your crew, check out the documentation:
-		# https://docs.crewai.com/concepts/knowledge#what-is-knowledge
+
+		# Define the tool
+		code_analysis_tool = Tool(
+			name="Code Analysis Tool",
+			description="Generates a call graph from a Python codebase.",
+			func=call_graph_tool,
+			args_schema={
+				"project_path": {
+					"type": "string",
+					"description": "The absolute path of the Python project directory to analyze."
+				}
+			}
+		)
 
 		return Crew(
 			agents=self.agents, # Automatically created by the @agent decorator
 			tasks=self.tasks, # Automatically created by the @task decorator
+			tools=[code_analysis_tool],
 			process=Process.sequential,
 			verbose=True,
-			# process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
 		)
