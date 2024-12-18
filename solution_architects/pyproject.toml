@@ -1,0 +1,22 @@
+[project]
+name = "solution_architects"
+version = "0.1.0"
+description = "solution_architects using crewAI"
+authors = [{ name = "Joy Chatterjee", email = "sreenjoy@thejoyofdata.co" }]
+requires-python = ">=3.10,<=3.13"
+dependencies = [
+    "crewai[tools]>=0.86.0,<1.0.0",
+    "langchain-community>=0.3.12,<1.0.0",
+    "networkx>=3.2.1,<4.0.0"
+]
+
+[project.scripts]
+solution_architects = "solution_architects.main:run"
+run_crew = "solution_architects.main:run"
+train = "solution_architects.main:train"
+replay = "solution_architects.main:replay"
+test = "solution_architects.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,0 +1,24 @@
+code_analysis_task:
+  description: >
+    Use a parser to traverse the AST and identify classes, methods, and their interactions on {topic}
+    Identify method calls, object creations, and message passing between different components.
+    Organize the extracted interactions in a structured format (e.g., JSON) for easier processing in subsequent steps
+  expected_output: >
+    A text-based representation of the code analysis output, JSON or plantuml format.
+  agent: code_analyst
+
+sequence_diagram_task:
+  description: >
+    Review the code analysis output and create a detailed sequence diagram in Mermaid syntax.
+  expected_output: >
+    A detailed sequence diagram based on the code analysis output.
+    Formatted as a Mermaid diagram.
+  agent: sequence_diagrammer
+
+compliance_validation_task:
+  description: >
+    Compare the generated sequence diagram with a predfined desired diagram to ensure compliance.
+  expected_output: >
+    A detailed sequence diagram based on the code analysis output.
+    Formatted as a Mermaid diagram.
+  agent: compliance_validator
