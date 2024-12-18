@@ -7,14 +7,11 @@ from solution_architects.tools.code_analysis_tool import CodeAnalysisTool
 from solution_architects.tools.sequence_diagram_tool import SequenceDiagramTool
 from solution_architects.tools.compliance_validation_tool import ComplianceValidationTool
 
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
-
 @CrewBase
 class SolutionArchitects():
 	"""SolutionArchitects crew"""
 
+	"""Agents and tasks configuration"""
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
@@ -35,6 +32,7 @@ class SolutionArchitects():
 
 	@agent
 	def sequence_diagrammer(self) -> Agent:
+		"""Sequence Diagrammer Agent"""
 		return Agent(
 			config=self.agents_config['sequence_diagrammer'],
 			verbose=True
