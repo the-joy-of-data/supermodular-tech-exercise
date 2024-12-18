@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 import sys
-import warnings
+import os
 
 from solution_architects.crew import SolutionArchitects
-
-warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
@@ -16,20 +14,22 @@ def run():
     Run the crew.
     """
     inputs = {
-        'topic': 'AI LLMs'
+        "topic": "supermodular.ai"
     }
-    SolutionArchitects().crew().kickoff(inputs=inputs)
-
+    project_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
+    architects = SolutionArchitects(project_path=project_path)
+    architects.crew().kickoff(inputs=inputs)
 
 def train():
     """
     Train the crew for a given number of iterations.
     """
     inputs = {
-        "topic": "AI LLMs"
+        "topic": "supermodular.ai"
     }
     try:
-        SolutionArchitects().crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
+        architects = SolutionArchitects(project_path="/path/to/your/project")
+        architects.crew().train(n_iterations=int(sys.argv[1]), filename=sys.argv[2], inputs=inputs)
 
     except Exception as e:
         raise Exception(f"An error occurred while training the crew: {e}")
@@ -39,7 +39,8 @@ def replay():
     Replay the crew execution from a specific task.
     """
     try:
-        SolutionArchitects().crew().replay(task_id=sys.argv[1])
+        architects = SolutionArchitects(project_path="/path/to/your/project")
+        architects.crew().replay(task_id=sys.argv[1])
 
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
@@ -49,10 +50,11 @@ def test():
     Test the crew execution and returns the results.
     """
     inputs = {
-        "topic": "AI LLMs"
+        "topic": "supermodular.ai"
     }
     try:
-        SolutionArchitects().crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
+        architects = SolutionArchitects(project_path="/path/to/your/project")
+        architects.crew().test(n_iterations=int(sys.argv[1]), openai_model_name=sys.argv[2], inputs=inputs)
 
     except Exception as e:
         raise Exception(f"An error occurred while replaying the crew: {e}")
