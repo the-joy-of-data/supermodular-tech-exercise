@@ -15,10 +15,10 @@ sequence_diagram_task:
     Formatted as a Mermaid diagram.
   agent: sequence_diagrammer
 
-# compliance_validation_task:
-#   description: >
-#     Compare the generated sequence diagram with a predfined desired diagram to ensure compliance.
-#   expected_output: >
-#     A detailed sequence diagram based on the code analysis output.
-#     Formatted as a Mermaid diagram.
-#   agent: compliance_validator
+compliance_validation_task:
+  description: >
+    Compare the generated sequence diagram with a predfined desired diagram to ensure compliance.
+  expected_output: >
+    A detailed sequence diagram based on the code analysis output.
+    Formatted as a Mermaid diagram.
+  agent: compliance_validator

@@ -1,10 +1,11 @@
 from crewai import Agent, Crew, Process, Task
-from crewai.tools import BaseTool
 from crewai.project import CrewBase, agent, crew, task
 from pathlib import Path
-import json
 
+from solution_architects.utils.get_paths import get_project_path, get_analysis_path, get_desired_sequence_diagram_path
 from solution_architects.tools.code_analysis_tool import CodeAnalysisTool
+from solution_architects.tools.sequence_diagram_tool import SequenceDiagramTool
+from solution_architects.tools.compliance_validation_tool import ComplianceValidationTool
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -39,12 +40,13 @@ class SolutionArchitects():
 			verbose=True
 		)
 
-	# @agent
-	# def compliance_validator(self) -> Agent:
-	# 	return Agent(
-	# 		config=self.agents_config['compliance_validator'],
-	# 		verbose=True
-	# 	)
+	@agent
+	def compliance_validator(self) -> Agent:
+		"""Compliance Validator Agent"""
+		return Agent(
+			config=self.agents_config['compliance_validator'],
+			verbose=True
+		)
 
 	@task
 	def code_analysis_task(self) -> Task:
@@ -65,22 +67,35 @@ class SolutionArchitects():
 		)
 		return task
 
-	# @task
-	# def compliance_validation_task(self) -> Task:
-	# 	return Task(
-	# 		config=self.tasks_config['compliance_validation_task'],
-	# 	)
+	@task
+	def compliance_validation_task(self) -> Task:
+		"""Validates the generated sequence diagram against a reference"""
+		task = Task(
+			config=self.tasks_config['compliance_validation_task'],
+			context_file=str(self.output_dir / "sequence_diagram.mmd"),
+			output_file=str(self.output_dir / "compliance_validation_result.txt")
+		)
+		return task
 
 	@crew
 	def crew(self) -> Crew:
 		"""Creates the SolutionArchitects crew"""
 
-		code_analysis_tool = CodeAnalysisTool(project_path=self.project_path)
+		# Define the project path
+		project_path = get_project_path()
+
+		# Define the analysis output path
+		analysis_path = get_analysis_path()
+
+		# Create tools
+		code_analysis_tool = CodeAnalysisTool(project_path=project_path)
+		sequence_diagram_tool = SequenceDiagramTool(analysis_path=analysis_path)
+		compliance_validation_tool = ComplianceValidationTool(reference_diagram_path=get_desired_sequence_diagram_path())
 
 		return Crew(
 			agents=self.agents,
 			tasks=self.tasks,
-			tools=[code_analysis_tool],
+			tools=[code_analysis_tool, sequence_diagram_tool, compliance_validation_tool],
 			process=Process.sequential,
 			verbose=True,
 		)

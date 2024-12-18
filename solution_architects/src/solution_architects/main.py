@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 import sys
-import os
 
+from solution_architects.utils.get_paths import get_project_path
 from solution_architects.crew import SolutionArchitects
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
 # Replace with inputs you want to test with, it will automatically
 # interpolate any tasks and agents information
+
 
 def run():
     """
@@ -16,8 +17,7 @@ def run():
     inputs = {
         "topic": "supermodular.ai"
     }
-    project_path = sys.argv[1] if len(sys.argv) > 1 else os.getcwd()
-    architects = SolutionArchitects(project_path=project_path)
+    architects = SolutionArchitects(project_path=get_project_path())
     architects.crew().kickoff(inputs=inputs)
 
 def train():
