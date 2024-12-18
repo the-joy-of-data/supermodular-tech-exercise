@@ -25,16 +25,39 @@ Next, navigate to your project directory and install the dependencies:
 crewai install
 ```
 
-We are building this with a local ollama model
+### Selecting the LLM model
+
+**For OPENAI users:** Add your `OPENAI_API_KEY` into the `.env` file
+
+**For OLLAMA users:** We are building this with a local ollama model `ollama:mistral`.
+
+If you want to use a different model, here is a list of local models you can use:
 
 ```
-ollama/mistral
+ollama:mistral
+ollama:llama3.1
+ollama:llama3
+ollama:llama3.2
+ollama:llama3.2-8b
+ollama:llama3.2-70b
+ollama:llama3.2-70b-instruct
+ollama:llama3.2-90b-instruct
+ollama:llama3.2-11b-instruct
 ```
 
-### Customizing
+Find out more in the [list of ollama models](https://ollama.com/search)
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+But you must download the model first. You can do this by running:
 
+```bash
+ollama run llama3.1
+```
+
+Once the model is downloaded, you can change the llm in `.env` file to the model you want to use.
+
+```
+MODEL=ollama:llama3.1
+```
 
 ## Running the Project
 
